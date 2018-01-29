@@ -71,9 +71,12 @@
       }
 
       .drawer-list a {
-        padding: 8px 24px;
         display: block;
         color: var(--primary-text-color);
+      }
+
+      app-drawer a {
+        padding: 8px 24px;
       }
 
       .drawer-list a.selected {
@@ -120,6 +123,18 @@
           height: initial;
         }
       }
+
+      .buy-ticket {
+        display: block;
+        position: absolute;
+        bottom: 120px;
+        padding: 16px;
+      }
+
+      .buy-ticket iron-icon {
+        width: 18px;
+        margin-bottom: 2px;
+      }
     </style>
 
     <iron-media-query id="mq-phone" full query="(max-width: {$ mediaQueries.xs.max $})"
@@ -156,6 +171,12 @@
           <a href="{$ nav.permalink $}" path="{$ nav.route $}" on-tap="closeDrawer">{$ nav.title $}</a>
           {% endfor %}
         </iron-selector>
+
+        <a href$="[[tickets.url]]" target="_blank" class="buy-ticket" rel="noopener noreferrer" ga-on="click"
+           ga-event-category="ticket button" ga-event-action="buy_click">
+          <span>{$ buyTicket $}</span>
+          <iron-icon icon="hoverboard:open-in-new"></iron-icon>
+        </a>
 
       </app-drawer>
 
@@ -247,8 +268,8 @@
   </template>
 
   <script>
+    // eslint-disable-next-line no-undef
     class HoverboardApp extends UtilsFunctions(ScrollFunctions(ReduxMixin(Polymer.Element))) {
-
       static get is() {
         return 'hoverboard-app';
       }
@@ -257,57 +278,62 @@
         return {
           ui: {
             type: Object,
-            statePath: 'ui'
+            statePath: 'ui',
           },
           route: {
             type: String,
-            statePath: 'routing'
+            statePath: 'routing',
           },
           hero: {
             type: Object,
             statePath: 'hero',
-            observer: '_heroChanged'
+            observer: '_heroChanged',
           },
           dialogs: {
             type: Object,
             statePath: 'dialogs',
-            observer: '_dialogToggled'
+            observer: '_dialogToggled',
           },
           viewport: {
             type: Object,
-            statePath: 'ui.viewport'
+            statePath: 'ui.viewport',
           },
           schedule: {
             type: Object,
-            statePath: 'schedule'
+            statePath: 'schedule',
           },
           notifications: {
             type: Boolean,
-            statePath: 'notifications'
+            statePath: 'notifications',
           },
           _openedDialog: {
-            type: String
+            type: String,
           },
           user: {
             type: Object,
-            statePath: 'user'
+            statePath: 'user',
           },
           providerUrls: {
             type: Object,
-            value: '{$ signInProviders.allowedProvidersUrl $}'
-          }
+            value: '{$ signInProviders.allowedProvidersUrl $}',
+          },
+          tickets: {
+            type: Object,
+            statePath: 'tickets',
+          },
         };
       }
 
       static get observers() {
         return [
           '_routeDataChanged(routeData.page, subroute.path)',
-          '_viewportChanged(isPhoneSize, isLaptopSize)'
+          '_viewportChanged(isPhoneSize, isLaptopSize)',
         ];
       }
 
       constructor() {
         super();
+        Polymer.setPassiveTouchGestures(true);
         window.performance && performance.mark && performance.mark('hoverboard-app.created');
         this._removeQueryParams = this._removeQueryParams.bind(this);
       }
@@ -324,10 +350,11 @@
 
       ready() {
         super.ready();
+        // eslint-disable-next-line no-console
         console.log('Hoverboard v2 is ready!');
         this.removeAttribute('unresolved');
         this._ensureLazyLoaded();
-//        userActions.autoSignIn(this.providerUrls);
+        // userActions.autoSignIn(this.providerUrls);
       }
 
       closeDrawer() {
@@ -351,7 +378,7 @@
         this.updateStyles({
           '--hero-background-color': hero.background.color || '',
           '--hero-background-gradient': hero.background.gradient || '',
-          '--hero-color': hero.fontColor || ''
+          '--hero-color': hero.fontColor || '',
         });
         setTimeout(() => {
           requestAnimationFrame(() => {
@@ -379,7 +406,7 @@
         uiActions.setViewportSize({
           isPhone: isPhoneSize,
           isTabletPlus: !isPhoneSize,
-          isLaptopPlus: isLaptopSize
+          isLaptopPlus: isLaptopSize,
         });
       }
 
@@ -388,7 +415,7 @@
           document.body.style.overflow = '';
           this._openedDialog = null;
         }
-        this._openedDialog = Object.keys(dialogs).find(key => dialogs[key].isOpened);
+        this._openedDialog = Object.keys(dialogs).find((key) => dialogs[key].isOpened);
         if (this._openedDialog) {
           document.body.style.overflow = 'hidden';
         }

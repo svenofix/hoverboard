@@ -1,16 +1,17 @@
+/* eslint-disable no-unused-vars,no-undef */
 const uiReducer = (state = initialState.ui, action) => {
   switch (action.type) {
     case TOGGLE_DRAWER:
       return Object.assign({}, state, {
-        isDrawerOpened: action.value || !state.isDrawerOpened
+        isDrawerOpened: action.value || !state.isDrawerOpened,
       });
     case TOGGLE_VIDEO_DIALOG:
       return Object.assign({}, state, {
-        videoDialog: Object.assign({}, state.videoDialog, action.value)
+        videoDialog: Object.assign({}, state.videoDialog, action.value),
       });
     case SET_VIEWPORT_SIZE:
       return Object.assign({}, state, {
-        viewport: Object.assign({}, state.viewport, action.value)
+        viewport: Object.assign({}, state.viewport, action.value),
       });
     default:
       return state;
@@ -21,11 +22,12 @@ const routingReducer = (state = initialState.routing, action) => {
   switch (action.type) {
     case SET_ROUTE:
       return Object.assign({}, state, {
-        route: action.route
+        route: action.route,
+        subRoute: null,
       });
     case SET_SUB_ROUTE:
       return Object.assign({}, state, {
-        subRoute: action.subRoute
+        subRoute: action.subRoute,
       });
     default:
       return state;
@@ -48,7 +50,7 @@ const dialogsReducer = (state = initialState.dialogs, action) => {
       return Object.assign({}, state, action.dialog);
     case CLOSE_DIALOG:
       return Object.assign({}, state, {
-        [action.dialogName]: initialState.dialogs[action.dialogName]
+        [action.dialogName]: initialState.dialogs[action.dialogName],
       });
     default:
       return state;
@@ -106,12 +108,12 @@ const sessionsReducer = (state = initialState.sessions, action) => {
     case FETCH_SESSIONS_LIST:
     case UPDATE_SESSIONS:
       return Object.assign({}, state, {
-        list: action.list
+        list: action.list,
       });
     case FETCH_USER_FEATURED_SESSIONS:
     case SET_USER_FEATURED_SESSIONS:
       return Object.assign({}, state, {
-        featured: action.featuredSessions || {}
+        featured: action.featuredSessions || {},
       });
     default:
       return state;
@@ -180,7 +182,7 @@ const notificationsReducer = (state = initialState.notifications, action) => {
     case UPDATE_NOTIFICATIONS_STATUS:
       return Object.assign({}, state, {
         status: action.status,
-        token: action.token
+        token: action.token,
       });
     default:
       return state;

@@ -24,8 +24,8 @@
       <app-header slot="header" class="header" fixed="[[viewport.isTabletPlus]]">
         <iron-icon
           class="close-icon"
-          icon="hoverboard:[[_getCLoseBtnIcon(viewport.isLaptopPlus)]]"
-          on-tap="close"
+          icon="hoverboard:[[_getCloseBtnIcon(viewport.isLaptopPlus)]]"
+          on-tap="_close"
         ></iron-icon>
         <app-toolbar>
           <div class="dialog-container header-content" layout vertical end-justified>
@@ -115,7 +115,10 @@
 
   <script>
 
-    class SessionDetails extends UtilsFunctions(ReduxMixin(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element))) {
+    // eslint-disable-next-line no-undef
+    class SessionDetails extends UtilsFunctions(
+      ReduxMixin(Polymer.mixinBehaviors([Polymer.IronOverlayBehavior], Polymer.Element))
+    ) {
       static get is() {
         return 'session-details';
       }
@@ -123,21 +126,21 @@
       static get properties() {
         return {
           session: {
-            type: Object
+            type: Object,
           },
           viewport: {
             type: Object,
-            statePath: 'ui.viewport'
+            statePath: 'ui.viewport',
           },
           user: {
             type: Object,
-            statePath: 'user'
+            statePath: 'user',
           },
           featuredSessions: {
             type: Object,
-            statePath: 'sessions.featured'
-          }
-        }
+            statePath: 'sessions.featured',
+          },
+        };
       }
 
       constructor() {
@@ -147,12 +150,16 @@
 
       static get observers() {
         return [
-          '_handleClose(opened, session)'
+          '_handleClose(opened, session)',
         ];
       }
 
       _close() {
         dialogsActions.closeDialog(DIALOGS.SESSION);
+        this.dispatchEvent(new CustomEvent('reset-query-params', {
+          bubbles: true,
+          composed: true,
+        }));
       }
 
       _handleClose(opened, session) {
@@ -168,7 +175,7 @@
         return getComputedStyle(this, `--${this.generateClassName(value)}`);
       }
 
-      _getCLoseBtnIcon(isLaptopViewport) {
+      _getCloseBtnIcon(isLaptopViewport) {
         return isLaptopViewport ? 'close' : 'arrow-left';
       }
 
@@ -177,7 +184,7 @@
           title: this.session.title,
           youtubeId: this.session.videoId,
           disableControls: true,
-          opened: true
+          opened: true,
         });
       }
 
@@ -191,13 +198,13 @@
               title: 'Sign in',
               callback: () => {
                 dialogsActions.openDialog(DIALOGS.SIGNIN);
-              }
-            }
+              },
+            },
           });
           return;
         }
         const sessions = Object.assign({}, this.featuredSessions, {
-          [this.session.id]: !this.featuredSessions[this.session.id] ? true : null
+          [this.session.id]: !this.featuredSessions[this.session.id] ? true : null,
         });
 
         sessionsActions.setUserFeaturedSessions(this.user.uid, sessions);
