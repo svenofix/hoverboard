@@ -175,7 +175,7 @@
           <div relative>
             <plastic-image
               class="photo"
-              srcset="[[speaker.photoUrl]]"
+              srcset="[[transformToStorageUrl(speaker.photoUrl)]]"
               sizing="cover"
               lazy-load preload fade
             ></plastic-image>
@@ -265,6 +265,10 @@
       connectedCallback() {
         super.connectedCallback();
         if (!Object.keys(this.speakers).length) speakersActions.fetchList();
+      }
+
+      transformToStorageUrl(photoUrl) {
+        return 'https://storage.googleapis.com/gdg-hamburg-2018.appspot.com' + photoUrl;
       }
 
       _speakersChanged() {
