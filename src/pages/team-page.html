@@ -40,10 +40,6 @@
         min-width: 300px;
       }
 
-      .member:hover .photo {
-        transform: scale(0.8);
-      }
-
       .photo {
         flex: none;
         width: 96px;
@@ -78,6 +74,7 @@
         };
 
         color: var(--secondary-text-color);
+        transition: transform var(--animation);
       }
 
       .social-icon:hover {
@@ -112,8 +109,17 @@
         }
       }
 
-
     </style>
+
+    <hero-block
+      background-image="{$ heroSettings.team.background.image $}"
+      background-color="{$ heroSettings.team.background.color $}"
+      font-color="{$ heroSettings.team.fontColor $}"
+      active="[[active]]"
+    >
+      <div class="hero-title highlight-font">{$ heroSettings.team.title $}</div>
+      <p class="hero-description">{$ heroSettings.team.description $}</p>
+    </hero-block>
 
     <div class="description-wrapper">
       <div class="container" layout horizontal justified>
@@ -153,6 +159,8 @@
         </div>
       </template>
     </div>
+
+    <footer-block></footer-block>
   </template>
 
   <script>
@@ -162,6 +170,7 @@
 
        static get properties() {
         return {
+          active: Boolean,
           team: {
             type: Object,
             statePath: 'team',

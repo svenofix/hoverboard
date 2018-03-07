@@ -42,7 +42,7 @@
     ],
     "heroSettings": {
         "home": {
-            "description": "The biggest Google tech conference in northern Germany, carefully crafted for you by the GDG community!",
+            "description": "The biggest Google tech conference in CEE. All about Android, Web, and Cloud.",
             "background": {
                 "color": "#673ab7",
                 "image": "/images/backgrounds/home.jpg"
@@ -87,6 +87,8 @@
         }
     },
     "location": {
+        "name": "Planeta kino",
+        "city": "Lviv",
         "short": "Hamburg, Germany",
         "address": "36 Shchyretska St, Lviv, Ukraine",
         "pointer": {
@@ -188,6 +190,9 @@
         },
         "speakers": {
             "itemsCount": 4
+        },
+        "tickets": {
+          "itemsCount": 5
         }
     }
 }

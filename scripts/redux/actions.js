@@ -12,15 +12,15 @@ const uiActions = {
       value,
     });
   },
-  setHero: (hero, route) => {
-    store.dispatch({
-      type: SET_HERO,
-      hero: hero || (heroSettings ? heroSettings[route || 'home'] : null),
-    });
-  },
   toggleVideoDialog: (value = null) => {
     store.dispatch({
       type: TOGGLE_VIDEO_DIALOG,
+      value,
+    });
+  },
+  setHeroSettings: (value) => {
+    store.dispatch({
+      type: SET_HERO_SETTINGS,
       value,
     });
   },
@@ -69,7 +69,7 @@ const dialogsActions = {
 let toastHideTimeOut;
 const toastActions = {
   showToast: (toast) => {
-    const duration = toast.duration || 5000;
+    const duration = typeof toast.duration !== 'undefined' ? toast.duration : 5000;
     store.dispatch({
       type: SHOW_TOAST,
       toast: Object.assign({}, toast, {
@@ -78,6 +78,7 @@ const toastActions = {
       }),
     });
 
+    if (duration === 0) return;
     clearTimeout(toastHideTimeOut);
     toastHideTimeOut = setTimeout(() => {
       toastActions.hideToast();
@@ -336,35 +337,35 @@ const userActions = {
       });
   },
 
-  autoSignIn: (providerUrls) => {
+  autoSignIn: () => {
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
       helperActions.storeUser(currentUser);
     }
-    else {
-      if (navigator.credentials) {
-        return navigator.credentials.get({
-          password: true,
-          federated: {
-            providers: providerUrls.split(','),
-            mediation: 'silent',
-          },
-        }).then((cred) => {
-          (() => {
-            if (cred) {
-              const provider = helperActions.getFederatedProvider(cred.provider);
-
-              if (!provider) return;
-
-              return firebase.auth().signInWithPopup(provider)
-                .then((signInObject) => {
-                  helperActions.storeUser(signInObject.user);
-                });
-            }
-          })();
-        });
-      }
-    }
+    // else {
+    //   if (navigator.credentials) {
+    //     return navigator.credentials.get({
+    //       password: true,
+    //       federated: {
+    //         providers: providerUrls.split(','),
+    //         mediation: 'silent',
+    //       },
+    //     }).then((cred) => {
+    //       (() => {
+    //         if (cred) {
+    //           const provider = helperActions.getFederatedProvider(cred.provider);
+    //
+    //           if (!provider) return;
+    //
+    //           return firebase.auth().signInWithPopup(provider)
+    //             .then((signInObject) => {
+    //               helperActions.storeUser(signInObject.user);
+    //             });
+    //         }
+    //       })();
+    //     });
+    //   }
+    // }
   },
 
   signOut: () => {
@@ -382,13 +383,24 @@ const userActions = {
 };
 
 const subscribeActions = {
+  addPartner: (data) => {
+    const id = data.email.replace(/[^\w\s]/gi, '');
+
+    firebase.database().ref(`potentialPartners/${id}`).set({
+      email: data.email,
+      fullName: data.firstFieldValue || '',
+      companyName: data.secondFieldValue || '',
+    }).then(() => {
+      dialogsActions.closeDialog(DIALOGS.SUBSCRIBE);
+    });
+  },
   subscribe: (data) => {
     const id = data.email.replace(/[^\w\s]/gi, '');
 
     firebase.database().ref(`subscribers/${id}`).set({
       email: data.email,
-      firstName: data.firstName || '',
-      lastName: data.lastName || '',
+      firstName: data.firstFieldValue || '',
+      lastName: data.secondFieldValue || '',
     })
       .then(() => {
         store.dispatch({

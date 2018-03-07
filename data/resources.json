@@ -13,6 +13,11 @@
   "buyTicket": "Buy ticket",
   "signIn": "Sign in",
   "signOut": "Sign out",
+  "viewHighlights": "View Highlights",
+  "offlineMessage": "You can still work offline.",
+  "cachingComplete": "Caching complete! Future visits will work offline.",
+  "newVersionAvailable": "A new version of this app is available.",
+  "refresh": "Refresh",
   "footer": {
     "blog": "Blog"
   },
@@ -131,11 +136,19 @@
   "ticketsBlock": {
     "title": "Tickets",
     "ticketsDetails": "Tickets grant access to all conference sections, coffee breaks, lunch and party. Accommodation is NOT included in the ticket price.",
-    "soldOut": "Sold out"
+    "soldOut": "You missed it!",
+    "notAvailableYet": "Not available yet",
+    "save": "Save ${discount}% today"
   },
   "partnersBlock": {
     "title": "Partners",
-    "button": "Become a partner"
+    "button": "Become a partner",
+    "form": {
+      "title": "Become a partner!",
+      "submitLabel": "Submit",
+      "fullName": "Full Name",
+      "companyName": "Company Name"
+    }
   },
   "featuredVideos": {
     "title": "DFUA'16 featured videos",
@@ -223,6 +236,7 @@
     }
   },
   "aboutOrganizerBlock": {
+    "image": "/images/team.jpg",
     "blocks": [
       {
         "title": "Organizer",

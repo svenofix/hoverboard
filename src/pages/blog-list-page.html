@@ -90,6 +90,18 @@
 
     </style>
 
+
+
+    <hero-block
+      background-image="{$ heroSettings.blog.background.image $}"
+      background-color="{$ heroSettings.blog.background.color $}"
+      font-color="{$ heroSettings.blog.fontColor $}"
+      active="[[active]]"
+    >
+      <div class="hero-title highlight-font">{$ heroSettings.blog.title $}</div>
+      <p class="hero-description">{$ heroSettings.blog.description $}</p>
+    </hero-block>
+
     <paper-progress indeterminate hidden$="[[contentLoaderVisibility]]"></paper-progress>
 
     <div class="featured">
@@ -98,8 +110,6 @@
           class="featured-posts-wrapper"
           card-padding="24px"
           card-height="256px"
-          avatar-size="0px"
-          avatar-circle="0px"
           border-radius="var(--border-radius)"
           title-top-position="32px"
           title-height="42px"
@@ -162,6 +172,7 @@
 
       static get properties() {
         return {
+          active: Boolean,
           postsSource: {
             type: Object,
             statePath: 'blog',
